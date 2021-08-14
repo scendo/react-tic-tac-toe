@@ -1,16 +1,16 @@
 import React from "react";
-import "semantic-ui-css/semantic.min.css";
 import { Grid, Header, List, Input, Icon, Dropdown } from "semantic-ui-react";
 import {
   boardHasCenter,
   getCorners,
   getDiagSquareIndexes,
   create_square_data_set,
-  boardWidthMinMax
+  boardWidthMinMax,
 } from "../helpers";
 import StartScreen from "../StartScreen";
 import Board from "../Board";
 import GameEnd from "../GameEnd";
+import { GameStyles } from "./styles";
 
 class Game extends React.Component {
   constructor(props) {
@@ -27,19 +27,22 @@ class Game extends React.Component {
       square_count: 9,
       center: 4,
       corners: [0, 2, 6, 8],
-      diag_square_indexes: [[0, 4, 8], [2, 4, 6]],
+      diag_square_indexes: [
+        [0, 4, 8],
+        [2, 4, 6],
+      ],
       history: [
         {
           squares: create_square_data_set(3),
           player: null,
-          position: null
-        }
+          position: null,
+        },
       ],
       stepNumber: 0,
       current_player: "O",
       current_position: null,
       xIsNext: true,
-      squareDimensions: this.calculateSquareDimensions(3)
+      squareDimensions: this.calculateSquareDimensions(3),
     };
   }
 
@@ -49,13 +52,13 @@ class Game extends React.Component {
 
   handleWindowResize() {
     this.setState({
-      squareDimensions: this.calculateSquareDimensions(this.state.board_width)
+      squareDimensions: this.calculateSquareDimensions(this.state.board_width),
     });
   }
 
   handleStartClick(e) {
     this.setState({
-      gameStarted: true
+      gameStarted: true,
     });
   }
 
@@ -66,14 +69,14 @@ class Game extends React.Component {
         {
           squares: create_square_data_set(this.state.board_width),
           player: null,
-          position: null
-        }
+          position: null,
+        },
       ],
       stepNumber: 0,
       current_player: "O",
       current_position: null,
       xIsNext: true,
-      squareDimensions: this.calculateSquareDimensions(this.state.board_width)
+      squareDimensions: this.calculateSquareDimensions(this.state.board_width),
     });
   }
 
@@ -100,13 +103,13 @@ class Game extends React.Component {
         {
           squares: squares,
           player: squares[i].player,
-          position: Object.assign(squares[i].position, { index: i })
-        }
+          position: Object.assign(squares[i].position, { index: i }),
+        },
       ]),
       stepNumber: history.length,
       current_player: squares[i].player,
       current_position: Object.assign(squares[i].position, { index: i }),
-      xIsNext: !this.state.xIsNext
+      xIsNext: !this.state.xIsNext,
     });
   }
 
@@ -141,15 +144,15 @@ class Game extends React.Component {
         {
           squares: create_square_data_set(board_width),
           player: null,
-          position: null
-        }
+          position: null,
+        },
       ],
       stepNumber: 0,
       current_player: "O",
       current_position: null,
       xIsNext: true,
       historyAsc: true,
-      squareDimensions: this.calculateSquareDimensions(board_width)
+      squareDimensions: this.calculateSquareDimensions(board_width),
     });
   }
 
@@ -168,7 +171,7 @@ class Game extends React.Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: step % 2 === 0
+      xIsNext: step % 2 === 0,
     });
   }
 
@@ -195,7 +198,7 @@ class Game extends React.Component {
       if (row.length === this.state.board_width) {
         return {
           winner: this.state.current_player,
-          squares: row
+          squares: row,
         };
       }
 
@@ -206,7 +209,7 @@ class Game extends React.Component {
       if (column.length === this.state.board_width) {
         return {
           winner: this.state.current_player,
-          squares: column
+          squares: column,
         };
       }
 
@@ -238,7 +241,7 @@ class Game extends React.Component {
         if (result.length === this.state.board_width) {
           return {
             winner: this.state.current_player,
-            squares: result
+            squares: result,
           };
         }
       }
@@ -332,7 +335,7 @@ class Game extends React.Component {
       stepNumber,
       square_count,
       board_width,
-      squareDimensions
+      squareDimensions,
     } = this.state;
 
     if (!gameStarted) {
@@ -370,49 +373,51 @@ class Game extends React.Component {
     const options = this.getMoveHistorySelections();
 
     return (
-      <div id="game">
-        <Grid centered={true} columns="3">
-          <Grid.Row id="game-header-row">
-            <Header id="game-header" as="h1" content="Tic Tac Toe" />
-          </Grid.Row>
-          <Grid.Row id="game-menu" centered={true} columns="3">
-            <Grid.Column width="2" mobile="5" verticalAlign="middle">
-              <strong>Player: </strong>
-              {status}
-            </Grid.Column>
+      <GameStyles>
+        <div id="game">
+          <Grid centered={true} columns="3">
+            <Grid.Row id="game-header-row">
+              <Header id="game-header" as="h1" content="Tic Tac Toe" />
+            </Grid.Row>
+            <Grid.Row id="game-menu" centered={true} columns="3">
+              <Grid.Column width="2" mobile="5" verticalAlign="middle">
+                <strong>Player: </strong>
+                {status}
+              </Grid.Column>
 
-            <Grid.Column width="2" mobile="5" verticalAlign="middle">
-              <Dropdown
-                id="move-history-dropdown"
-                trigger={trigger}
-                options={options}
-                onChange={this.handleHistoryItemClick}
-                selectOnBlur={false}
-              />
-            </Grid.Column>
-            <Grid.Column width="2" mobile="5" verticalAlign="middle">
-              <Input
-                id="board-size-input"
-                onChange={this.handleBoardSizeInput}
-                size="small"
-                placeholder="Board Size"
-              />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row centered={true}>
-            <Grid.Column width="16">
-              <Board
-                board_width={board_width}
-                square_count={square_count}
-                squareDimensions={squareDimensions}
-                squares={current.squares}
-                onClick={i => this.handleSquareClick(i)}
-                winning_data={winning_data}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+              <Grid.Column width="2" mobile="5" verticalAlign="middle">
+                <Dropdown
+                  id="move-history-dropdown"
+                  trigger={trigger}
+                  options={options}
+                  onChange={this.handleHistoryItemClick}
+                  selectOnBlur={false}
+                />
+              </Grid.Column>
+              <Grid.Column width="2" mobile="5" verticalAlign="middle">
+                <Input
+                  id="board-size-input"
+                  onChange={this.handleBoardSizeInput}
+                  size="small"
+                  placeholder="Board Size"
+                />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row centered={true}>
+              <Grid.Column width="16">
+                <Board
+                  board_width={board_width}
+                  square_count={square_count}
+                  squareDimensions={squareDimensions}
+                  squares={current.squares}
+                  onClick={(i) => this.handleSquareClick(i)}
+                  winning_data={winning_data}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+      </GameStyles>
     );
   }
 }
