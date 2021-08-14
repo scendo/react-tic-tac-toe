@@ -7,10 +7,10 @@ import {
   getDiagSquareIndexes,
   create_square_data_set,
   boardWidthMinMax
-} from "./helpers";
-import StartScreen from "./StartScreen";
-import Board from "./Board";
-import GameEnd from "./GameEnd";
+} from "./components/helpers";
+import StartScreen from "./components/StartScreen";
+import Board from "./components/Board";
+import GameEnd from "./components/GameEnd";
 
 export default class Game extends React.Component {
   constructor(props) {
