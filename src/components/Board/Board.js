@@ -27,7 +27,7 @@ function Board({ onSquareClick, squares }) {
             key={id}
             player={player}
             onClick={handleOnSquareClick(square)}
-            color={"blue"}
+            color="white"
           />
         );
       })}
