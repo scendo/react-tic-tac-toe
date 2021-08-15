@@ -7,7 +7,7 @@ import { GameStyles } from "./styles";
 
 function Game(props) {
   const {
-    state: { prevPlayer, currentPlayer, hasWinner, squaresById },
+    state: { prevPlayer, squaresById, hasWinner, isDraw },
     initGame,
     currentPlayerSelectsSquare,
   } = useGameContext();
@@ -30,8 +30,8 @@ function Game(props) {
         <Board squares={squares} onSquareClick={handleOnSquareClick} />
       </div>
       <EndGameModal
-        open={hasWinner}
-        title={`PLAYER ${prevPlayer} WINS!`}
+        open={hasWinner || isDraw}
+        title={hasWinner ? `PLAYER ${prevPlayer} WINS!` : "DRAW"}
         onPlayAgain={initGame}
       />
     </GameStyles>

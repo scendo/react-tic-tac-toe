@@ -19,6 +19,11 @@ const initialState = {
   squaresById: {},
 
   hasWinner: false,
+
+  /**
+   * All squares are taken, but there is no winner
+   */
+  isDraw: false,
 };
 
 function reducer(state, action) {
@@ -70,6 +75,10 @@ function reducer(state, action) {
 
       const hasWinner = didSomeoneWin(squares);
 
+      //are all squares taken by a player?
+      const allSquaresTaken =
+        squares.filter(({ player }) => !player).length === 0;
+
       return {
         ...state,
         currentPlayer: nextPlayer,
@@ -84,6 +93,7 @@ function reducer(state, action) {
           currentPlayer === 2 && {
             player2Wins: player2Wins + 1,
           }),
+        isDraw: allSquaresTaken && !hasWinner,
       };
     }
 
