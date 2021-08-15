@@ -12,6 +12,10 @@ const initialState = {
 
   currentPlayer: 1, //players 1 or 2
 
+  player1Wins: 0,
+
+  player2Wins: 0,
+
   squaresById: {},
 
   hasWinner: false,
@@ -31,18 +35,22 @@ function reducer(state, action) {
     }
 
     case "INIT_GAME": {
+      const { player1Wins, player2Wins } = state;
+
       const squares = createSquares();
       const squaresById = keyBy(squares, "id");
 
       return {
         ...initialState,
         started: true,
+        player1Wins,
+        player2Wins,
         squaresById,
       };
     }
 
     case "CURRENT_PLAYER_SELECTS_SQUARE": {
-      const { currentPlayer, squaresById } = state;
+      const { currentPlayer, squaresById, player1Wins, player2Wins } = state;
       const { square } = payload;
 
       const prevPlayer = currentPlayer;
@@ -68,6 +76,14 @@ function reducer(state, action) {
         prevPlayer,
         squaresById: updatedSquaresById,
         hasWinner,
+        ...(hasWinner &&
+          currentPlayer === 1 && {
+            player1Wins: player1Wins + 1,
+          }),
+        ...(hasWinner &&
+          currentPlayer === 2 && {
+            player2Wins: player2Wins + 1,
+          }),
       };
     }
 

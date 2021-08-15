@@ -1,8 +1,13 @@
 import React from "react";
+import { useGameContext } from "./@context";
 import { Header, Icon } from "semantic-ui-react";
 import { GameHeaderStyles } from "./styles";
 
 function GameHeader(props) {
+  const {
+    state: { player1Wins, player2Wins },
+  } = useGameContext();
+
   return (
     <GameHeaderStyles>
       <div>
@@ -13,9 +18,9 @@ function GameHeader(props) {
         <div className="score-container">
           <Header>SCORE</Header>
           <div className="count-container">
-            <div className="count">1</div>
+            <div className="count">{player1Wins}</div>
             <div className="divider" />
-            <div className="count">2</div>
+            <div className="count">{player2Wins}</div>
           </div>
         </div>
         <div className="player">
