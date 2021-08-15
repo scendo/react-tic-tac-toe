@@ -35,7 +35,7 @@ function reducer(state, action) {
       const squaresById = keyBy(squares, "id");
 
       return {
-        ...state,
+        ...initialState,
         started: true,
         squaresById,
       };

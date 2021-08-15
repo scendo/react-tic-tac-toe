@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import Board from "../Board";
 import { GameContextProvider, useGameContext } from "./@context";
+import Board from "../Board";
+import EndGameModal from "../EndGameModal";
 import { GameStyles } from "./styles";
 
 function Game(props) {
@@ -18,18 +19,17 @@ function Game(props) {
   }
 
   useEffect(() => {
-    if (hasWinner) {
-      alert("WINNER", currentPlayer);
-    }
-  }, [hasWinner]);
-
-  useEffect(() => {
     initGame();
   }, []);
 
   return (
     <GameStyles>
       <Board squares={squares} onSquareClick={handleOnSquareClick} />
+      <EndGameModal
+        open={hasWinner}
+        title={`PLAYER ${prevPlayer} WINS!`}
+        onPlayAgain={initGame}
+      />
     </GameStyles>
   );
 }
